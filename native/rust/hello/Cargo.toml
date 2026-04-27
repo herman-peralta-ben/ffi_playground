@@ -1,0 +1,8 @@
+[package]
+name = "hello_rust"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+# generate .dylib, .so or .dll
+crate-type = ["cdylib"]

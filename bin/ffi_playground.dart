@@ -1,4 +1,6 @@
 import 'package:args/args.dart';
+import 'hello/c_quick_hello.dart';
+import 'hello/c_full_hello.dart';
 
 const String version = '0.0.1';
 
@@ -48,10 +50,25 @@ void main(List<String> arguments) {
     if (verbose) {
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
+
+    _hello();
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
     print('');
     printUsage(argParser);
   }
+}
+
+void _hello() {
+  final quickHelloBridge = loadQuickHelloC();
+  quickHelloBridge.fn("World");
+
+  final fullHelloBridge = loadFullHelloC();
+  final result = fullHelloBridge.fn("42");
+  print(result);
+
+  // Dispose
+  quickHelloBridge.dispose();
+  fullHelloBridge.dispose();
 }

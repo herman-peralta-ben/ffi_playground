@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'hello/c_quick_hello.dart';
 import 'hello/c_full_hello.dart';
+import 'hello/rust_hello_bridge.dart';
 
 const String version = '0.0.1';
 
@@ -51,7 +52,8 @@ void main(List<String> arguments) {
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
 
-    _hello();
+    _helloC();
+    _helloRust();
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
@@ -60,12 +62,25 @@ void main(List<String> arguments) {
   }
 }
 
-void _hello() {
+void _helloC() {
   final quickHelloBridge = loadQuickHelloC();
   quickHelloBridge.fn("World");
 
   final fullHelloBridge = loadFullHelloC();
   final result = fullHelloBridge.fn("42");
+  print(result);
+
+  // Dispose
+  quickHelloBridge.dispose();
+  fullHelloBridge.dispose();
+}
+
+void _helloRust() {
+  final quickHelloBridge = loadQuickHelloRust();
+  quickHelloBridge.fn("Rust");
+
+  final fullHelloBridge = loadFullHelloRust();
+  final result = fullHelloBridge.fn("Rust_42");
   print(result);
 
   // Dispose

@@ -86,3 +86,10 @@ What used to be Cross-Thread Communication is now just **Cross-Language Executio
 clang -dynamiclib -undefined dynamic_lookup native/c/hello.c -o lib/libhello.dylib
 ```
 
+### Rust
+
+Run from project root:
+
+```bash
+cargo build --release --manifest-path native/rust/hello/Cargo.toml --target-dir lib && mv lib/release/libhello_rust.dylib lib/libhello_rust.dylib && rm -rf lib/release
+```

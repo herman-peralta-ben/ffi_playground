@@ -1,8 +1,31 @@
 # FFI Playground
 A sample command-line application providing basic argument parsing with an entrypoint in `bin/` to play around with FFI.
 
-## Thread Merge in Flutter 3.39
+## TLDR
+1. Compile the `C` and `Rust` libs (see the `Compiling` section below). 
+2. Run the `main` function in `bin/ffi_playground.dart`.
+```bash
+dart run bin/ffi_playground.dart 
+```
+> Recommended to [Markdown Code Block Runner](https://marketplace.visualstudio.com/items?itemName=renathossain.markdown-runner) extension in Visual Studio Code.
 
+### Compiling
+
+#### C
+* Mac (run from project root)
+```bash
+clang -dynamiclib -undefined dynamic_lookup native/c/hello.c -o lib/libhello.dylib
+```
+
+#### Rust
+
+Run from project root:
+
+```bash
+cargo build --release --manifest-path native/rust/hello/Cargo.toml --target-dir lib && mv lib/release/libhello_rust.dylib lib/libhello_rust.dylib && rm -rf lib/release
+```
+
+## Thread Merge in Flutter 3.39
 Historically, the Flutter Engine managed three dedicated threads in addition to the Native Platform Thread. Since recent updates (Flutter 3.x+), the `UI Thread` has been unified with the `Platform Thread`.
 
 
@@ -77,19 +100,3 @@ What used to be Cross-Thread Communication is now just **Cross-Language Executio
 
 > Use FFI for high-performance communication with C/C++/Rust via pointers; use Pigeon for safe, high-level communication with Android/iOS APIs (Kotlin/Swift) via serialization.
 
-
-## Compiling
-
-### C
-* Mac (run from project root)
-```bash
-clang -dynamiclib -undefined dynamic_lookup native/c/hello.c -o lib/libhello.dylib
-```
-
-### Rust
-
-Run from project root:
-
-```bash
-cargo build --release --manifest-path native/rust/hello/Cargo.toml --target-dir lib && mv lib/release/libhello_rust.dylib lib/libhello_rust.dylib && rm -rf lib/release
-```

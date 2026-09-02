@@ -19,22 +19,22 @@ dart run bin/ffi_playground.dart
 
 ### Compiling
 
-#### C
-##### macOS
+#### macOS (Run from ffi_playground directory)
 ```bash
-clang -dynamiclib -undefined dynamic_lookup native/c/hello.c -o lib/libhello.dylib
-```
+HELLO_SRC=native/hello
+TARG=lib/hello
+rm -rf $TARG/*.dylib
 
-#### Rust
-##### macOS
-```bash
-cargo build --release --manifest-path native/rust/hello/Cargo.toml --target-dir lib && mv lib/release/libhello_rust.dylib lib/libhello_rust.dylib && rm -rf lib/release
-```
+# C
+clang -dynamiclib -undefined dynamic_lookup $HELLO_SRC/c/hello.c -o $TARG/libhello_c.dylib
 
-#### Go
-##### macOS
-```bash
-go build -buildmode=c-shared -o lib/libhello_go.dylib native/go/hello/hello.go
+# Rust
+cargo build --release --manifest-path $HELLO_SRC/rust/hello/Cargo.toml --target-dir $TARG
+mv $TARG/release/libhello_rust.dylib $TARG/libhello_rust.dylib
+rm -rf $TARG/release
+
+# Go
+go build -buildmode=c-shared -o $TARG/libhello_go.dylib $HELLO_SRC/go/hello.go
 ```
 
 # Dart FFI

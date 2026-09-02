@@ -1,7 +1,15 @@
 # FFI Playground
-A sample command-line application providing basic argument parsing with an entrypoint in `bin/` to play around with FFI.
+A simple Dart playground for calling native code (C ABI) through `dart:ffi`.
 
-## TLDR
+## TLDR: The Hello Example
+The `native/hello` directory contains two versions of the classic "Hello World" in different languages. It exports the following functions:
+
+- `quick_hello`: Accepts a string and prints a message directly.
+- `full_hello`: Accepts a string and returns the message as a new string.
+  - **Note:** `free_string` must be called to deallocate the string memory once Dart receives it to prevent memory leaks.
+
+### How to use
+
 1. Compile the `C` and `Rust` libs (see the `Compiling` section below). 
 2. Run the `main` function in `bin/ffi_playground.dart`.
 ```bash
@@ -12,22 +20,35 @@ dart run bin/ffi_playground.dart
 ### Compiling
 
 #### C
-* Mac (run from project root)
+##### macOS
 ```bash
 clang -dynamiclib -undefined dynamic_lookup native/c/hello.c -o lib/libhello.dylib
 ```
 
 #### Rust
-
-Run from project root:
-
+##### macOS
 ```bash
 cargo build --release --manifest-path native/rust/hello/Cargo.toml --target-dir lib && mv lib/release/libhello_rust.dylib lib/libhello_rust.dylib && rm -rf lib/release
 ```
 
+#### Go
+##### macOS
+```bash
+go build -buildmode=c-shared -o lib/libhello_go.dylib native/go/hello/hello.go
+```
+
+# Dart FFI
+* **FFI** stands for `Foreign Function Interface`. `dart:ffi` communicates exclusively using the `C ABI`(**Application Binary Interface**) — the universal standard for binary communication.
+
+* The Analogy: Imagine **Dart speaks Spanish** and **Go speaks German**. They cannot understand each other directly. However, **both languages know how to speak English (C)**.
+
+* The Process: When you use FFI, you force **Dart** to translate its data into **"English"** (`C` pointers like `Pointer<Utf8>`), and you force **Go** to receive and reply in **"English"** (C types like `*C.char`).
+
+* Compatibility: Languages like `C`, `C++`, and `Rust` work seamlessly with FFI, while languages like `Go` require a tiny wrapper (`cgo`) to **"disguise" themselves as C libraries**.
+
+# Background threading in Flutter
 ## Thread Merge in Flutter 3.39
 Historically, the Flutter Engine managed three dedicated threads in addition to the Native Platform Thread. Since recent updates (Flutter 3.x+), the `UI Thread` has been unified with the `Platform Thread`.
-
 
 ### Pre-Merge Architecture:
 1. Platform Thread: Host OS main thread (Android/iOS). Handles native events and lifecycle.

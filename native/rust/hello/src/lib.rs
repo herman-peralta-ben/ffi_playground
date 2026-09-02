@@ -5,7 +5,7 @@ use std::os::raw::c_char;
 pub extern "C" fn quick_hello(cname: *const c_char) {
     let c_str = unsafe { CStr::from_ptr(cname) };
     let name = c_str.to_str().unwrap_or("null");
-    println!("Hello from Rust!, {}!", name);
+    println!("Hello from Rust, {}!", name);
 }
 
 #[unsafe(no_mangle)]
@@ -18,7 +18,7 @@ pub extern "C" fn full_hello(cname: *const c_char) -> *mut c_char {
     };
     
     let name = c_str.to_str().unwrap_or("null");
-    let greeting = format!("Hello from Rust!, {}!", name);
+    let greeting = format!("Hello from Rust, {}!", name);
     
     match CString::new(greeting) {
         Ok(c_string) => c_string.into_raw(),

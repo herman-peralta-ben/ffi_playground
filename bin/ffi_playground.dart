@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'hello/c_quick_hello.dart';
 import 'hello/c_full_hello.dart';
 import 'hello/rust_hello_bridge.dart';
+import 'hello/go_hello_bridge.dart';
 
 const String version = '0.0.1';
 
@@ -52,8 +55,18 @@ void main(List<String> arguments) {
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
 
+    print("======= C ======");
     _helloC();
+    print("======= Rust ======");
     _helloRust();
+    print("======= Go ======");
+    _helloGo();
+    
+    // 🚨 When Go binaries are compiled using '-buildmode=c-shared', 
+    // Go's runtime spawns background threads that keep the process alive.
+    // We force exit here to terminate them and close the app.
+    exit(0);
+    //_helloGo();
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);
@@ -77,13 +90,26 @@ void _helloC() {
 
 void _helloRust() {
   final quickHelloBridge = loadQuickHelloRust();
-  quickHelloBridge.fn("Rust");
+  quickHelloBridge.fn("World");
 
   final fullHelloBridge = loadFullHelloRust();
-  final result = fullHelloBridge.fn("Rust_42");
+  final result = fullHelloBridge.fn("42");
   print(result);
 
   // Dispose
   quickHelloBridge.dispose();
   fullHelloBridge.dispose();
+}
+
+void _helloGo() {
+  final quickHelloGoBridge = loadQuickHelloGoBridge();
+  quickHelloGoBridge.fn("World");
+
+  final fullHelloGoBridge = loadFullHelloGoBridge();
+  final result = fullHelloGoBridge.fn("42");
+  print(result);
+
+  // Dispose
+  quickHelloGoBridge.dispose();
+  fullHelloGoBridge.dispose();
 }

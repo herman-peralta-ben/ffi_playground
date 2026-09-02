@@ -1,5 +1,6 @@
 import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
+import '../types.dart';
 
 // region Signatures
 /// Matches to: `void quick_hello(char* name)` C function.
@@ -19,7 +20,7 @@ typedef QuickHelloDart = void Function(ffi.Pointer<Utf8> name);
 /// ```
 ///
 /// **Note:** This requires a compiled library (e.g. `libhello.dylib` on Mac) to be present in the `./lib/` directory. Please check the README.md for more details.
-({void Function(String name) fn, void Function() dispose}) loadQuickHelloC([
+BridgeStringVoid loadQuickHelloC([
   String libName = "libhello.dylib",
 ]) {
   final dylib = ffi.DynamicLibrary.open('./lib/$libName');

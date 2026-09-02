@@ -1,14 +1,13 @@
 import 'c_full_hello.dart';
 import 'c_quick_hello.dart';
+import '../types.dart';
 
-({void Function(String name) fn, void Function() dispose}) loadQuickHelloRust([
-  String libName = "libhello_rust.dylib",
-]) {
-  return loadQuickHelloC(libName);
+const _rustHelloLib = "libhello_rust.dylib";
+
+BridgeStringVoid loadQuickHelloRust() {
+  return loadQuickHelloC(_rustHelloLib);
 }
 
-({String Function(String name) fn, void Function() dispose}) loadFullHelloRust([
-  String libName = "libhello_rust.dylib",
-]) {
-  return loadFullHelloC(libName);
+BridgeStringString loadFullHelloRust() {
+  return loadFullHelloC(_rustHelloLib);
 }

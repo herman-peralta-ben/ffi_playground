@@ -1,5 +1,6 @@
 import 'dart:ffi' as ffi;
-import 'package:ffi/ffi.dart'; // Necesitas el paquete 'ffi' en pubspec.yaml
+import 'package:ffi/ffi.dart'; // Needs the 'ffi' package in pubspec.yaml
+import '../types.dart';
 
 // region Signatures
 // C
@@ -25,7 +26,7 @@ typedef FreeStringDart = void Function(ffi.Pointer<Utf8> ptr);
 /// ```
 ///
 /// **Note:** This requires a compiled library (e.g. `libhello.dylib` on Mac) to be present in the `./lib/` directory. Please check the README.md for more details.
-({String Function(String name) fn, void Function() dispose}) loadFullHelloC([
+BridgeStringString loadFullHelloC([
   String libName = "libhello.dylib",
 ]) {
   final dylib = ffi.DynamicLibrary.open('./lib/$libName');

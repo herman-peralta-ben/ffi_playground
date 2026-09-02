@@ -9,7 +9,7 @@ void quick_hello(const char* name) {
 
 // Creates and returns a string with the provided name.
 char* full_hello(const char* name) {
-    const char* greeting = "Hello ";
+    const char* greeting = "Hello from C, ";
     // +2 because of "!" and null terminator
     size_t length = strlen(greeting) + strlen(name) + 2;
 
